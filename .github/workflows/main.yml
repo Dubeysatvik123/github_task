@@ -79,14 +79,14 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             echo "🔄 Pulling latest Docker image..."
-            docker pull ${{ env.IMAGE_NAME }}:latest
+            sudo docker pull ${{ env.IMAGE_NAME }}:latest
 
             echo "🧹 Removing old container (if exists)..."
-            docker stop gradio-app || true
-            docker rm gradio-app || true
+            sudo docker stop gradio-app || true
+            sudo docker rm gradio-app || true
 
             echo "🚀 Running new container..."
-            docker run -d \
+            sudo docker run -d \
               --name gradio-app \
               -p 7860:7860 \
               ${{ env.IMAGE_NAME }}:latest
