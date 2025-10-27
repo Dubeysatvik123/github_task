@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from project1 import evaluate_startup_idea
+from app import evaluate_startup_idea
 
 def test_evaluate_startup_idea_with_empty_prompt():
     result = evaluate_startup_idea("")
