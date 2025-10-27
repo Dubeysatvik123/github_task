@@ -3,7 +3,7 @@ import gradio as gr
 import time
 
 genai.configure(api_key="AIzaSyBbrgh2ySGhRHai_IeyPwE_3lTFZjCxC5c")
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 def evaluate_startup_idea(prompt, progress=gr.Progress()):
     """Evaluate startup idea with progress tracking"""
