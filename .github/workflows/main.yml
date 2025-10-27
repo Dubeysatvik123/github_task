@@ -1,4 +1,4 @@
-name: 🚀 Gradio CI Pipeline
+name: 🚀 Gradio CI/CD Pipeline
 
 on:
   push:
@@ -12,7 +12,7 @@ env:
   PYTHON_VERSION: "3.8"
 
 jobs:
-
+  # -------------------- TEST JOB --------------------
   test:
     name: 🧪 Run Unit Tests (pytest)
     runs-on: ubuntu-latest
@@ -33,7 +33,6 @@ jobs:
 
       - name: Run pytest
         run: pytest test.py -v
-
 
   # -------------------- BUILD JOB --------------------
   build_docker:
@@ -63,3 +62,33 @@ jobs:
           tags: |
             ${{ env.IMAGE_NAME }}:latest
             ${{ env.IMAGE_NAME }}:${{ github.run_number }}
+
+  # -------------------- DEPLOY JOB --------------------
+  deploy:
+    name: 🚀 Deploy Gradio App on EC2
+    runs-on: ubuntu-latest
+    needs: build_docker
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Connect to EC2 & Deploy Latest Docker Image
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "🔄 Pulling latest Docker image..."
+            docker pull ${{ env.IMAGE_NAME }}:latest
+
+            echo "🧹 Removing old container (if exists)..."
+            docker stop gradio-app || true
+            docker rm gradio-app || true
+
+            echo "🚀 Running new container..."
+            docker run -d \
+              --name gradio-app \
+              -p 7860:7860 \
+              ${{ env.IMAGE_NAME }}:latest
+
+            echo "✅ Deployment complete! App running on port 7860."
