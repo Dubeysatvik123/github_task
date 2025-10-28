@@ -12,6 +12,9 @@ pipeline {
                 sh '''
                     python3 -m pip install --upgrade pip
                     pip install -r requirements.txt pytest
+                    pip install --upgrade jinja2>=3.1.2
+                    pip install markupsafe==2.0.1
+                    
                     python3 -m pytest test.py
                     
                 '''
