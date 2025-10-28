@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -10,24 +9,40 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                // checkout scm
-                // sh '''
-                //     python3 -m pip install --upgrade pip
-                //     pip install -r requirements.txt 
-                //     pip install pytest
-                //     pytest test.py -v
-                // '''
+                echo '🔍 Running tests...'
+                sh '''
+                    export PATH=$PATH:/var/lib/jenkins/.local/bin
+                    python3 -m pip install --upgrade pip
+                    pip install -r requirements.txt pytest
+                    python3 -m pytest test.py -v
+                '''
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Deploy') {
             steps {
-                echo 'Building Docker image...'
+                echo '🚀 Building and deploying Docker container...'
                 sh '''
-                    sudo docker run -p 7860:7860 $IMAGE_NAME:latest
+                    docker build -t $IMAGE_NAME:latest .
+                    docker run -d -p 7860:7860 --name gradio_app $IMAGE_NAME:latest
                 '''
             }
+        }
+
+        stage('Stop') {
+            steps {
+                echo '🛑 Stopping Docker container...'
+                sh '''
+                    docker stop gradio_app || true
+                    docker rm gradio_app || true
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            echo '✅ Pipeline completed.'
         }
     }
 }
