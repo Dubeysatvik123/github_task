@@ -1,6 +1,6 @@
 
 pipeline {
-    agent any
+   
 
     environment {
         IMAGE_NAME = 'satvikdubey268/gradio-app'
@@ -25,6 +25,7 @@ pipeline {
                 echo 'Building Docker image...'
                 sh '''
                     docker build -t $IMAGE_NAME:latest .
+                    docker run -p 7860:7860 $IMAGE_NAME:latest
                 '''
             }
         }
