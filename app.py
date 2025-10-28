@@ -179,7 +179,7 @@ with gr.Blocks(css=custom_css, title="🚀Manthan The AI", theme=gr.themes.Soft(
         fn=clear_inputs,
         outputs=[idea_input, output]
     )
-    
+    #new updae
     gr.HTML("""
     <div style="text-align: center; margin-top: 2rem; padding: 1rem; color: #666; border-top: 1px solid #eee;">
         <p>🤖 Powered by Google's Gemini AI | Built with Gradio</p>
