@@ -12,7 +12,7 @@ pipeline {
                 sh '''
                     python3 -m pip install --upgrade pip
                     pip install -r requirements.txt pytest
-                    pytest test.py
+                    python3 -m pytest test.py
                     
                 '''
             }
