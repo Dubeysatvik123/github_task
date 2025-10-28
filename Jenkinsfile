@@ -25,7 +25,6 @@ pipeline {
             steps {
                 echo 'Building Docker image...'
                 sh '''
-                    docker build -t $IMAGE_NAME:latest .
                     docker run -p 7860:7860 $IMAGE_NAME:latest
                 '''
             }
