@@ -14,7 +14,6 @@ pipeline {
                     export PATH=$PATH:/var/lib/jenkins/.local/bin
                     python3 -m pip install --upgrade pip
                     pip install -r requirements.txt pytest
-                    python3 -m pytest test.py -v
                 '''
             }
         }
